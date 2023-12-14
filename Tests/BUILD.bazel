@@ -1,0 +1,9 @@
+load("@rules_swift//swift:swift.bzl", "swift_test")
+
+package(default_visibility = ["@rules_xcodeproj//xcodeproj:generated"])
+
+swift_test(
+    name = "BEPConverterTests",
+    srcs = glob(["BEPConverterTests/**/*.swift"]),
+    deps = ["//Sources:BEPConverter.lib"],
+)

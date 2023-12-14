@@ -1,0 +1,16 @@
+load("@rules_swift//swift:swift.bzl", "swift_library", "swift_binary")
+
+swift_library(
+    name = "BEPConverter.lib",
+    module_name = "BEPConverter",
+    srcs = glob(["BEPConverter/**/*.swift"]),
+    deps = ["@swift_bep_parser//SwiftBEPParser"],
+    visibility = ["//visibility:public"],
+)
+
+swift_binary(
+    name = "bepc",
+    srcs = ["bepc/bepc.swift"],
+    deps = [":BEPConverter.lib"],
+    visibility = ["//visibility:public"],
+)

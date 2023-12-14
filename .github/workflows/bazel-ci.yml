@@ -1,0 +1,49 @@
+name: Bazel Continuous Integration
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+concurrency:
+  # Use github.run_id on main branch
+  # Use github.event.pull_request.number on pull requests, so it's unique per pull request
+  # Use github.ref on other branches, so it's unique per branch
+  group: ${{ github.workflow }}-${{ github.ref == 'refs/heads/main' && github.run_id || github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  bazel:
+    strategy:
+      matrix:
+        os: ["macos-13"]
+        compilation_mode: ["dbg", "opt"]
+        xcode_version: ["15.0"]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Mount bazel cache
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.cache/bazel
+            /private/var/tmp/_bazel_runner/
+          key: ${{ matrix.os }}-${{ matrix.compilation_mode }}-${{ matrix.xcode_version }}-bazel-${{ hashFiles('.bazelversion', '.bazelrc', 'MODULE.bazel') }}
+          restore-keys: |
+            ${{ matrix.os }}-${{ matrix.compilation_mode }}-${{ matrix.xcode_version }}-bazel-
+      - name: Select Xcode
+        run: |
+          echo "Available Xcode versions: $(ls /Applications | grep Xcode)"
+          sudo xcode-select -s /Applications/Xcode_${{ matrix.xcode_version }}.app
+      - name: "Lint (Bazel for ${{ matrix.compilation_mode }}, Xcode ${{ matrix.xcode_version }})"
+        run: |
+          bazel run lint \
+            --xcode_version="${{ matrix.xcode_version }}"
+      - name: "Test (Bazel for ${{ matrix.compilation_mode }}, Xcode ${{ matrix.xcode_version }})"
+        run: |
+          bazel test //... \
+            --compilation_mode=${{ matrix.compilation_mode }} \
+            --xcode_version="${{ matrix.xcode_version }}"

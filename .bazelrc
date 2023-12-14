@@ -1,0 +1,10 @@
+common --enable_bzlmod
+common --incompatible_disallow_empty_glob
+
+common --host_macos_minimum_os=13.0
+common --macos_minimum_os=13.0
+
+common --enable_platform_specific_config
+common:macos --apple_crosstool_top=@local_config_apple_cc//:toolchain
+common:macos --crosstool_top=@local_config_apple_cc//:toolchain
+common:macos --host_crosstool_top=@local_config_apple_cc//:toolchain
