@@ -8,3 +8,7 @@ common --enable_platform_specific_config
 common:macos --apple_crosstool_top=@local_config_apple_cc//:toolchain
 common:macos --crosstool_top=@local_config_apple_cc//:toolchain
 common:macos --host_crosstool_top=@local_config_apple_cc//:toolchain
+
+common --attempt_to_print_relative_paths
+
+common --disk_cache=~/Library/Caches/bazel-bazel-build-event-converter

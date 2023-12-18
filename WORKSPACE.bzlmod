@@ -1,0 +1,3 @@
+"""
+NOTE: defines the workspace when using bzlmod, use MODULE.bazel instead
+"""

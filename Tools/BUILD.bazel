@@ -1,0 +1,19 @@
+package(default_visibility = ["//:__subpackages__"])
+
+genrule(
+    name = "lint",
+    srcs = [
+        "//:.swiftlint.yml",
+    ],
+    outs = ["lint.sh"],
+    cmd = """
+echo "set -euo pipefail" > "$@"
+echo "./$(location @buildifier_prebuilt//:buildifier) -lint fix -mode fix -r \\$$BUILD_WORKSPACE_DIRECTORY" >> "$@"
+echo "./$(location @swiftlint//:swiftlint) --fix \\$$BUILD_WORKSPACE_DIRECTORY --config $(location //:.swiftlint.yml)" >> "$@"
+""",
+    executable = True,
+    tools = [
+        "@buildifier_prebuilt//:buildifier",
+        "@swiftlint",
+    ],
+)

@@ -4,7 +4,7 @@ module(
     name = "bazel_build_event_converter",
     version = "0",
     bazel_compatibility = [
-        "<7.0.0",
+        "<8.0.0",
         ">=6.0.0",
     ],
     compatibility_level = 1,
@@ -32,8 +32,8 @@ bazel_dep(
 # TODO: replace with relace
 git_override(
     module_name = "swift_bep_parser",
+    commit = "4ab83f01615b57faaa0cb0d6f44568121bddbde9",
     remote = "https://github.com/luispadron/swift-bep-parser.git",
-    commit = "b9f331eda96fd6ed9ac8d6bc95cc3b4745b23565",
 )
 
 # - Development Deps
@@ -55,4 +55,13 @@ bazel_dep(
 )
 
 apple_cc_configure = use_extension("@apple_support//crosstool:setup.bzl", "apple_cc_configure_extension")
-use_repo(apple_cc_configure, "local_config_apple_cc")
+use_repo(
+    apple_cc_configure,
+    "local_config_apple_cc",
+)
+
+non_module_deps = use_extension("//Tools:non_module_deps.bzl", "non_module_deps")
+use_repo(
+    non_module_deps,
+    "swift_argument_parser",
+)

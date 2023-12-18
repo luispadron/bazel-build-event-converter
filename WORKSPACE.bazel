@@ -1,0 +1,4 @@
+"""
+NOTE: this is here for compatibility with older tools.
+Some rules and versions of bazelisk expect this file to exist.
+"""

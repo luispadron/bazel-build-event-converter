@@ -1,10 +1,9 @@
 import Foundation
 import SwiftBEPParser
 
-public class BepConverter {
-    public init() {}
+public protocol BEPConverter {
 
-    public func convert(_ input: String) -> String {
-        return "Foo"
-    }
+    associatedtype Output
+
+    func convert(_ file: URL) async throws -> Output
 }

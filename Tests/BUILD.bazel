@@ -7,3 +7,9 @@ swift_test(
     srcs = glob(["BEPConverterTests/**/*.swift"]),
     deps = ["//Sources:BEPConverter.lib"],
 )
+
+swift_test(
+    name = "JUnitTests",
+    srcs = glob(["JUnitTests/**/*.swift"]),
+    deps = ["//Sources:JUnit.lib"],
+)
